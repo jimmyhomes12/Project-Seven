@@ -22,7 +22,7 @@ SELECT
     sc.region,
     sc.income_band,
     sc.membership_status,
-    COALESCE(MIN(ss.order_date::DATE), NULLIF(MIN(sc.last_order_date), '')::DATE) AS first_seen_date,
+    COALESCE(MIN(ss.order_date::DATE), MIN(NULLIF(sc.last_order_date, '')::DATE)) AS first_seen_date,
     MAX(ss.order_date::DATE)                              AS last_purchase_date,
     (sc.churn_flag = '1')                                 AS is_churned
 FROM staging.stg_churn sc
