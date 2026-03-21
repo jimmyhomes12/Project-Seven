@@ -66,9 +66,9 @@ psql -d ecommerce_warehouse
 \i sql/02_staging_tables.sql
 
 -- Load CSVs (run from the project root)
-\COPY stg_sales   FROM 'data/sales_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
-\COPY stg_churn   FROM 'data/churn_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
-\COPY stg_ab_test FROM 'data/ab_test_raw.csv' WITH (FORMAT CSV, HEADER TRUE);
+\COPY staging.stg_sales   FROM 'data/sales_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
+\COPY staging.stg_churn   FROM 'data/churn_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
+\COPY staging.stg_ab_test FROM 'data/ab_test_raw.csv' WITH (FORMAT CSV, HEADER TRUE);
 
 \i sql/03_etl_insert_dim_fact.sql
 \i sql/04_quality_checks.sql

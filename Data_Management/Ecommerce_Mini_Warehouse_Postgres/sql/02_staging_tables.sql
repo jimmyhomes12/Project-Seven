@@ -4,17 +4,19 @@
 -- Purpose: load CSV data as-is before transformation
 -- =============================================================
 
+CREATE SCHEMA IF NOT EXISTS staging;
+
 -- -------------------------------------------------------------
 -- Drop staging tables if they exist (idempotent re-run)
 -- -------------------------------------------------------------
-DROP TABLE IF EXISTS stg_sales    CASCADE;
-DROP TABLE IF EXISTS stg_churn    CASCADE;
-DROP TABLE IF EXISTS stg_ab_test  CASCADE;
+DROP TABLE IF EXISTS staging.stg_sales    CASCADE;
+DROP TABLE IF EXISTS staging.stg_churn    CASCADE;
+DROP TABLE IF EXISTS staging.stg_ab_test  CASCADE;
 
 -- -------------------------------------------------------------
 -- Staging: stg_sales  (mirrors sales_raw.csv)
 -- -------------------------------------------------------------
-CREATE TABLE stg_sales (
+CREATE TABLE staging.stg_sales (
     order_id      VARCHAR(20),
     customer_id   VARCHAR(20),
     product_id    VARCHAR(20),
@@ -34,7 +36,7 @@ CREATE TABLE stg_sales (
 -- -------------------------------------------------------------
 -- Staging: stg_churn  (mirrors churn_raw.csv)
 -- -------------------------------------------------------------
-CREATE TABLE stg_churn (
+CREATE TABLE staging.stg_churn (
     customer_id             VARCHAR(20),
     region                  VARCHAR(50),
     income_band             VARCHAR(20),
@@ -52,7 +54,7 @@ CREATE TABLE stg_churn (
 -- -------------------------------------------------------------
 -- Staging: stg_ab_test  (mirrors ab_test_raw.csv)
 -- -------------------------------------------------------------
-CREATE TABLE stg_ab_test (
+CREATE TABLE staging.stg_ab_test (
     user_id              VARCHAR(20),
     experiment_name      VARCHAR(100),
     ab_group             VARCHAR(20),
@@ -69,6 +71,6 @@ CREATE TABLE stg_ab_test (
 -- Run these COPY commands from psql (adjust file paths as needed)
 -- =============================================================
 
--- \COPY stg_sales   FROM 'data/sales_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
--- \COPY stg_churn   FROM 'data/churn_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
--- \COPY stg_ab_test FROM 'data/ab_test_raw.csv' WITH (FORMAT CSV, HEADER TRUE);
+\COPY staging.stg_sales   FROM 'data/sales_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
+\COPY staging.stg_churn   FROM 'data/churn_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
+\COPY staging.stg_ab_test FROM 'data/ab_test_raw.csv' WITH (FORMAT CSV, HEADER TRUE);
