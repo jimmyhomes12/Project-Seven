@@ -14,12 +14,15 @@ Ecommerce_Mini_Warehouse_Postgres/
 │   ├── churn_raw.csv         # Customer churn attributes & labels
 │   └── ab_test_raw.csv       # A/B experiment results
 ├── sql/
-│   ├── 01_schema_ddl.sql     # Create dimension & fact tables
-│   ├── 02_staging_tables.sql # Raw landing (staging) tables + COPY commands
-│   ├── 03_etl_insert_dim_fact.sql  # Transform staging → warehouse
-│   └── 04_quality_checks.sql       # Referential integrity & business-rule checks
+│   ├── 01_schema_ddl.sql          # Create dimension & fact tables
+│   ├── 02_staging_tables.sql      # Raw landing (staging) tables + COPY commands
+│   ├── 03_etl_insert_dim_fact.sql # Transform staging → warehouse
+│   ├── 04_quality_checks.sql      # Referential integrity & business-rule checks
+│   └── 05_sample_analytics.sql   # Sample analytical queries
 ├── notebooks/
 │   └── 01_etl_and_quality_checks.ipynb  # End-to-end ETL + QC in Python
+├── tests/
+│   └── test_warehouse.py     # Automated pytest suite (24 tests)
 ├── diagrams/
 │   └── ecommerce_star_schema.png    # ERD / star-schema diagram
 └── README.md
@@ -85,6 +88,24 @@ export PG_PASSWORD=your_password
 
 jupyter notebook notebooks/01_etl_and_quality_checks.ipynb
 ```
+
+### 4 — Run the automated test suite
+
+```bash
+pip install pytest psycopg2-binary sqlalchemy pandas
+
+# Optional: set connection env vars (same defaults as above)
+export PG_USER=postgres
+export PG_PASSWORD=your_password
+
+# From the Ecommerce_Mini_Warehouse_Postgres/ directory:
+pytest tests/test_warehouse.py -v
+```
+
+The suite builds a temporary database (`ecommerce_warehouse_test`), runs the
+full pipeline, and validates 24 checks covering row counts, referential
+integrity, business rules, and aggregate sanity.  It drops the database on
+completion.
 
 ---
 
