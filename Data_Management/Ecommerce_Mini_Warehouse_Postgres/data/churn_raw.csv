@@ -22,3 +22,10 @@ C020,North,Low,Standard,59.99,1,2023-02-05,34,18,1,2023-04-05
 C021,East,Medium,Premium,99.96,1,2023-02-07,32,65,0,
 C022,West,High,Standard,104.97,1,2023-02-08,31,58,0,
 C023,North,Low,Standard,99.98,1,2023-02-09,30,22,1,2023-04-10
+C024,South,Medium,Standard,99.98,1,2023-02-09,40,42,0,
+C025,West,Low,Standard,39.99,1,2022-12-15,96,18,1,2023-04-15
+C026,North,High,Premium,89.95,1,2023-02-10,39,68,0,
+C027,East,Medium,Standard,29.99,1,2022-11-20,121,14,1,2023-04-18
+C028,South,Low,Standard,19.99,1,2022-12-01,110,10,1,2023-04-20
+C029,West,High,Premium,59.99,1,2023-02-12,37,72,0,
+C030,North,Medium,Standard,149.97,1,2023-02-13,36,55,0,
