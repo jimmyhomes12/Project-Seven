@@ -25,8 +25,8 @@ SELECT
     MIN(ss.order_date::DATE)                              AS first_seen_date,
     MAX(ss.order_date::DATE)                              AS last_purchase_date,
     (sc.churn_flag = '1')                                 AS is_churned
-FROM stg_churn sc
-LEFT JOIN stg_sales ss USING (customer_id)
+FROM staging.stg_churn sc
+LEFT JOIN staging.stg_sales ss USING (customer_id)
 GROUP BY
     sc.customer_id,
     sc.region,
@@ -59,7 +59,7 @@ SELECT DISTINCT
     MIN(ss.order_date::DATE) OVER (PARTITION BY ss.customer_id) AS first_seen_date,
     MAX(ss.order_date::DATE) OVER (PARTITION BY ss.customer_id) AS last_purchase_date,
     FALSE       AS is_churned
-FROM stg_sales ss
+FROM staging.stg_sales ss
 WHERE ss.customer_id NOT IN (SELECT customer_id FROM dw.dim_customer)
 ON CONFLICT (customer_id) DO NOTHING;
 
@@ -71,7 +71,7 @@ SELECT DISTINCT
     product_id,
     category,
     product_name
-FROM stg_sales
+FROM staging.stg_sales
 ON CONFLICT (product_id) DO NOTHING;
 
 -- -------------------------------------------------------------
@@ -80,7 +80,7 @@ ON CONFLICT (product_id) DO NOTHING;
 -- -------------------------------------------------------------
 INSERT INTO dw.dim_channel (channel_name)
 SELECT DISTINCT channel
-FROM stg_sales
+FROM staging.stg_sales
 WHERE channel NOT IN (SELECT channel_name FROM dw.dim_channel)
 ON CONFLICT (channel_name) DO NOTHING;
 
@@ -89,7 +89,7 @@ ON CONFLICT (channel_name) DO NOTHING;
 -- -------------------------------------------------------------
 INSERT INTO dw.dim_experiment (experiment_name)
 SELECT DISTINCT experiment_name
-FROM stg_ab_test
+FROM staging.stg_ab_test
 ON CONFLICT (experiment_name) DO NOTHING;
 
 -- -------------------------------------------------------------
@@ -114,7 +114,7 @@ SELECT
     ss.revenue::NUMERIC,
     NULLIF(ss.cost, '')::NUMERIC                  AS cogs,
     ss.gross_profit::NUMERIC
-FROM stg_sales ss
+FROM staging.stg_sales ss
 JOIN dw.dim_channel dc ON dc.channel_name = ss.channel;
 
 -- -------------------------------------------------------------
@@ -137,7 +137,7 @@ SELECT
     num_orders::INT,
     engagement_score::NUMERIC,
     NULLIF(last_order_date, '')::DATE                       AS last_order_date
-FROM stg_churn
+FROM staging.stg_churn
 ON CONFLICT (customer_id) DO UPDATE
     SET churn_flag       = EXCLUDED.churn_flag,
         churn_date       = EXCLUDED.churn_date,
@@ -168,6 +168,6 @@ SELECT
         ELSE NULL
     END                                                             AS date_key,
     COALESCE(NULLIF(sa.revenue, '')::NUMERIC, 0)                   AS revenue
-FROM stg_ab_test sa
+FROM staging.stg_ab_test sa
 JOIN dw.dim_experiment de USING (experiment_name)
 WHERE sa.user_id IN (SELECT customer_id FROM dw.dim_customer);
