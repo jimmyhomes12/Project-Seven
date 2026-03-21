@@ -1,7 +1,15 @@
-# Ecommerce Mini Warehouse — PostgreSQL
+# E-commerce Analytics Mini Data Warehouse (PostgreSQL)
 
-A self-contained, recruiter-ready data warehouse project built on **PostgreSQL**.  
-It ingests three raw CSV data sets (retail sales, customer churn, and A/B-test results) into a clean **star-schema** warehouse, then runs automated data-quality checks.
+This project builds a small **star schema data warehouse** in PostgreSQL to support analytics across e-commerce sales, customer churn, and A/B testing experiments. It demonstrates schema design, ETL processes, data quality checks, and analytics querying.
+
+---
+
+## Business context
+
+The warehouse consolidates three datasets:
+- **Retail sales transactions** (revenue, COGS, profitability by product/channel)
+- **Customer churn records** (demographics, spending behavior, churn flags)
+- **A/B test results** (landing page experiments)
 
 ---
 
@@ -50,6 +58,34 @@ Ecommerce_Mini_Warehouse_Postgres/
 | `fact_sales`   | One row per transaction | `quantity`, `revenue`, `gross_profit` |
 | `fact_churn`   | One row per customer    | `churn_flag`, `total_spend`, `engagement_score` |
 | `fact_ab_test` | One row per experiment participant | `converted`, `revenue` |
+
+**Key design principles:**
+- Primary/foreign key relationships for referential integrity
+- Data types optimized for analytics (`NUMERIC` for money, `DATE` for time)
+- `CHECK` constraints to enforce business rules (e.g., non-negative quantities)
+
+---
+
+## ETL process
+
+1. **Staging:** Raw CSVs land in `staging.*` tables via `\COPY` (no validation).
+2. **Dimension loading:** `INSERT … ON CONFLICT DO UPDATE` into `dw.dim_*` tables with business rules applied (e.g., income band normalisation, `is_churned` flag).
+3. **Fact loading:** `INSERT … SELECT` joins staging to dimensions, applying type casts and NULL handling.
+4. **Quality checks:** Referential integrity, business rules, and aggregation consistency validated in `04_quality_checks.sql`.
+
+---
+
+## Data quality results
+
+| Table name      |    Rows | Issues |
+|-----------------|--------:|--------|
+| dim_customer    |  5,000+ | 0      |
+| dim_product     |    25+  | 0      |
+| dim_date        |  4,018  | 0      |
+| dim_channel     |      3+ | 0      |
+| fact_sales      | 17,000+ | 0      |
+| fact_churn      |  9,000  | 0      |
+| fact_ab_test    |290,000+ | 0      |
 
 ---
 
@@ -124,29 +160,41 @@ completion.
 
 ## Sample Analytical Queries
 
+**Revenue by channel and month** (`05_sample_analytics.sql` query 1):
+
 ```sql
--- Monthly revenue trend
-SELECT dd.year, dd.month, SUM(fs.revenue) AS total_revenue
-FROM fact_sales fs
-JOIN dim_date dd ON dd.date_key = fs.date_key
-GROUP BY dd.year, dd.month
-ORDER BY dd.year, dd.month;
+SELECT dd.year, dd.month, TRIM(dd.month_name) AS month_name,
+       dc.channel_name, SUM(fs.revenue) AS total_revenue
+FROM dw.fact_sales fs
+JOIN dw.dim_date    dd ON fs.date_key   = dd.date_key
+JOIN dw.dim_channel dc ON fs.channel_id = dc.channel_id
+GROUP BY dd.year, dd.month, dd.month_name, dc.channel_name
+ORDER BY dd.year, dd.month, dc.channel_name;
+```
 
--- Churn rate by income band
-SELECT dc.income_band,
-       COUNT(*) AS customers,
-       ROUND(100.0 * SUM(CASE WHEN fc.churn_flag THEN 1 ELSE 0 END) / COUNT(*), 2) AS churn_rate_pct
-FROM fact_churn fc
-JOIN dim_customer dc USING (customer_id)
-GROUP BY dc.income_band;
+**Churn rate by membership status** (`05_sample_analytics.sql` query 2):
 
--- A/B test lift (treatment vs control)
-SELECT experiment_name,
-       ab_group,
-       ROUND(100.0 * SUM(converted::INT) / COUNT(*), 2) AS cvr_pct
-FROM fact_ab_test
-GROUP BY experiment_name, ab_group
-ORDER BY experiment_name, ab_group;
+```sql
+SELECT dc.membership_status,
+       COUNT(fc.customer_id) AS customer_count,
+       ROUND(SUM(CASE WHEN fc.churn_flag THEN 1 ELSE 0 END)::NUMERIC / COUNT(*), 4) AS churn_rate,
+       ROUND(AVG(fc.total_spend), 2) AS avg_total_spend
+FROM dw.fact_churn   fc
+JOIN dw.dim_customer dc ON fc.customer_id = dc.customer_id
+GROUP BY dc.membership_status
+ORDER BY churn_rate DESC;
+```
+
+**A/B test conversion rates** (`05_sample_analytics.sql` query 4):
+
+```sql
+SELECT de.experiment_name, fat.group_name,
+       COUNT(fat.ab_test_id) AS test_users,
+       ROUND(SUM(CASE WHEN fat.converted THEN 1 ELSE 0 END)::NUMERIC / COUNT(*), 4) AS conversion_rate
+FROM dw.fact_ab_test   fat
+JOIN dw.dim_experiment de ON fat.experiment_id = de.experiment_id
+GROUP BY de.experiment_name, fat.group_name
+ORDER BY de.experiment_name, fat.group_name;
 ```
 
 ---
@@ -161,3 +209,15 @@ ORDER BY experiment_name, ab_group;
 | SQLAlchemy | ≥ 2.0 |
 | psycopg2-binary | ≥ 2.9 |
 | jupyter | any recent |
+
+---
+
+## Skills demonstrated
+
+- **Data modeling** – star schema design with proper primary/foreign keys and relationships
+- **ETL development** – SQL-based transform and load processes with idempotent upserts
+- **Data quality** – referential integrity checks, business rule validation, duplicate detection
+- **Analytics readiness** – tables optimized for revenue, churn, and experiment analysis
+- **Test automation** – 24‑check pytest suite covering row counts, integrity, business rules, and aggregates
+
+This warehouse structure supports analytics projects such as RFM segmentation, churn prediction, A/B testing, and retail KPI dashboards.
