@@ -1,0 +1,31 @@
+order_id,customer_id,product_id,channel,order_date,category,product_name,region,quantity,unit_price,revenue,cost,gross_profit
+1001,C001,P010,online,2023-01-05,Electronics,Wireless Earbuds,North,2,49.99,99.98,60.00,39.98
+1002,C002,P022,store,2023-01-06,Clothing,Winter Jacket,South,1,89.95,89.95,55.00,34.95
+1003,C003,P005,online,2023-01-07,Home & Garden,Coffee Maker,East,1,59.99,59.99,35.00,24.99
+1004,C004,P031,mobile,2023-01-08,Electronics,Smart Watch,West,1,199.99,199.99,120.00,79.99
+1005,C005,P010,store,2023-01-09,Electronics,Wireless Earbuds,North,3,49.99,149.97,90.00,59.97
+1006,C001,P045,online,2023-01-10,Beauty,Face Cream,South,2,24.99,49.98,18.00,31.98
+1007,C006,P022,mobile,2023-01-11,Clothing,Winter Jacket,East,1,89.95,89.95,55.00,34.95
+1008,C007,P005,online,2023-01-12,Home & Garden,Coffee Maker,West,2,59.99,119.98,70.00,49.98
+1009,C008,P031,store,2023-01-13,Electronics,Smart Watch,North,1,199.99,199.99,120.00,79.99
+1010,C009,P050,online,2023-01-14,Books,Data Science Handbook,South,4,34.99,139.96,40.00,99.96
+1011,C010,P010,mobile,2023-01-15,Electronics,Wireless Earbuds,East,1,49.99,49.99,30.00,19.99
+1012,C002,P022,online,2023-01-16,Clothing,Winter Jacket,West,2,89.95,179.90,110.00,69.90
+1013,C003,P005,store,2023-01-17,Home & Garden,Coffee Maker,North,1,59.99,59.99,35.00,24.99
+1014,C004,P031,online,2023-01-18,Electronics,Smart Watch,South,2,199.99,399.98,240.00,159.98
+1015,C011,P045,mobile,2023-01-19,Beauty,Face Cream,East,3,24.99,74.97,27.00,47.97
+1016,C012,P050,store,2023-01-20,Books,Data Science Handbook,West,1,34.99,34.99,10.00,24.99
+1017,C013,P010,online,2023-01-21,Electronics,Wireless Earbuds,North,2,49.99,99.98,60.00,39.98
+1018,C014,P022,mobile,2023-01-22,Clothing,Winter Jacket,South,1,89.95,89.95,55.00,34.95
+1019,C015,P005,online,2023-01-23,Home & Garden,Coffee Maker,East,3,59.99,179.97,105.00,74.97
+1020,C001,P031,store,2023-01-24,Electronics,Smart Watch,West,1,199.99,199.99,120.00,79.99
+1021,C016,P045,online,2023-02-01,Beauty,Face Cream,North,2,24.99,49.98,18.00,31.98
+1022,C017,P050,mobile,2023-02-02,Books,Data Science Handbook,South,2,34.99,69.98,20.00,49.98
+1023,C018,P010,store,2023-02-03,Electronics,Wireless Earbuds,East,1,49.99,49.99,30.00,19.99
+1024,C019,P022,online,2023-02-04,Clothing,Winter Jacket,West,3,89.95,269.85,165.00,104.85
+1025,C020,P005,mobile,2023-02-05,Home & Garden,Coffee Maker,North,1,59.99,59.99,35.00,24.99
+1026,C002,P031,online,2023-02-06,Electronics,Smart Watch,South,1,199.99,199.99,120.00,79.99
+1027,C021,P045,store,2023-02-07,Beauty,Face Cream,East,4,24.99,99.96,36.00,63.96
+1028,C022,P050,online,2023-02-08,Books,Data Science Handbook,West,3,34.99,104.97,30.00,74.97
+1029,C023,P010,mobile,2023-02-09,Electronics,Wireless Earbuds,North,2,49.99,99.98,60.00,39.98
+1030,C003,P022,store,2023-02-10,Clothing,Winter Jacket,South,1,89.95,89.95,55.00,34.95
