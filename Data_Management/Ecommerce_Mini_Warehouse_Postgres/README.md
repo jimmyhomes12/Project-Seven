@@ -33,6 +33,7 @@ Ecommerce_Mini_Warehouse_Postgres/
 │   └── test_warehouse.py     # Automated pytest suite (24 tests)
 ├── diagrams/
 │   └── ecommerce_star_schema.png    # ERD / star-schema diagram
+├── POWERBI_GUIDE.md                 # Power BI dashboard setup (churn + A/B test)
 └── README.md
 ```
 
@@ -196,6 +197,12 @@ JOIN dw.dim_experiment de ON fat.experiment_id = de.experiment_id
 GROUP BY de.experiment_name, fat.group_name
 ORDER BY de.experiment_name, fat.group_name;
 ```
+
+---
+
+## Power BI Dashboard
+
+A step-by-step guide for connecting Power BI Desktop to this warehouse and building the churn and A/B test dashboards (including DAX measures, recommended visuals, publish-to-service steps, and connection troubleshooting) is in **[POWERBI_GUIDE.md](POWERBI_GUIDE.md)**.
 
 ---
 
