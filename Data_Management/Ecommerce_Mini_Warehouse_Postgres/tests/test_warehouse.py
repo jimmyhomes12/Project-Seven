@@ -187,6 +187,12 @@ def test_row_counts(engine, table, min_rows):
         "WHERE NOT EXISTS (SELECT 1 FROM dw.dim_customer dc WHERE dc.customer_id = fc.customer_id)",
     ),
     (
+        "fact_churn → dim_date",
+        "SELECT COUNT(*) AS issues FROM dw.fact_churn fc "
+        "WHERE fc.date_key IS NOT NULL "
+        "AND NOT EXISTS (SELECT 1 FROM dw.dim_date dd WHERE dd.date_key = fc.date_key)",
+    ),
+    (
         "fact_ab_test → dim_customer",
         "SELECT COUNT(*) AS issues FROM dw.fact_ab_test fa "
         "WHERE NOT EXISTS (SELECT 1 FROM dw.dim_customer dc WHERE dc.customer_id = fa.user_id)",

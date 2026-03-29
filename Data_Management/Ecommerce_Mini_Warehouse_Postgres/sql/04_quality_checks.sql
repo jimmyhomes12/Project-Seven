@@ -60,6 +60,15 @@ WHERE NOT EXISTS (
     SELECT 1 FROM dw.dim_customer dc WHERE dc.customer_id = fc.customer_id
 );
 
+-- fact_churn → dim_date
+SELECT 'fact_churn: orphan date_key' AS check_name,
+       COUNT(*) AS issues
+FROM dw.fact_churn fc
+WHERE fc.date_key IS NOT NULL
+  AND NOT EXISTS (
+    SELECT 1 FROM dw.dim_date dd WHERE dd.date_key = fc.date_key
+);
+
 -- fact_ab_test → dim_customer
 SELECT 'fact_ab_test: orphan user_id' AS check_name,
        COUNT(*) AS issues

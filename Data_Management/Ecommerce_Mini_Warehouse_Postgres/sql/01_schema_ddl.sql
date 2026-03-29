@@ -127,6 +127,7 @@ CREATE TABLE dw.fact_churn (
     customer_id        VARCHAR(20)   NOT NULL REFERENCES dw.dim_customer(customer_id),
     churn_flag         BOOLEAN       NOT NULL DEFAULT FALSE,
     churn_date         DATE,
+    date_key           INT           REFERENCES dw.dim_date(date_key),
     total_spend        NUMERIC(12,2) NOT NULL CHECK (total_spend >= 0),
     num_orders         INT           NOT NULL DEFAULT 0,
     engagement_score   NUMERIC(5,2),
@@ -156,6 +157,7 @@ CREATE INDEX idx_fact_sales_date      ON dw.fact_sales(date_key);
 CREATE INDEX idx_fact_sales_channel   ON dw.fact_sales(channel_id);
 
 CREATE INDEX idx_fact_churn_flag      ON dw.fact_churn(churn_flag);
+CREATE INDEX idx_fact_churn_date      ON dw.fact_churn(date_key);
 
 CREATE INDEX idx_fact_ab_experiment   ON dw.fact_ab_test(experiment_id);
 CREATE INDEX idx_fact_ab_group        ON dw.fact_ab_test(group_name);
