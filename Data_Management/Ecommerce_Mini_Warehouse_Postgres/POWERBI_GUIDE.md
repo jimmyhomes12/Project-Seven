@@ -93,9 +93,9 @@ CALCULATE(
 
 | Visual | X / Rows | Y / Values | Notes |
 |--------|----------|------------|-------|
-| Card ×4 | — | Churn Rate, Total Customers, Churned Customers, Churned Revenue | Pin to top of page; keep cards large and simple |
-| Bar chart | `dim_customer[membership_status]` | `[Churn Rate]` | Sorted descending; turn on data labels |
-| Line chart | `dim_date[month]` | `[Churn Rate]` | Shows monthly trend; sort by numeric month key if needed |
+| Card ×4 | — | Churn Rate, Total Customers, Churned Customers, Churned Revenue | Pin to top of page in a single aligned row; keep cards large and simple |
+| Bar chart | `dim_customer[membership_status]` | `[Churn Rate]` | Sorted descending; turn on data labels; use a simple color palette |
+| Line chart | `dim_date[month_name]` | `[Churn Rate]` | Use `month_name` on axis (sort by `dim_date[month]`); for multi-year data use a year-month field instead |
 | Treemap | `dim_customer[region]` | `[Churn Rate]` | Colour saturation = churn rate |
 
 #### Slicers
@@ -106,14 +106,28 @@ CALCULATE(
 
 #### Page 1 formatting
 
-Apply these settings before adding more pages so the dashboard looks polished and is easier to present:
+Apply these settings before adding more pages so the dashboard looks polished and is easier to present.
+
+**Recommended order**
+
+1. Format the `Churn Rate` measure as a percentage.
+2. Sort `month_name` by `month` (numeric).
+3. Style the bar chart data labels.
+4. Resize and align the cards last.
+
+**Settings reference**
 
 | Element | Setting |
 |---------|---------|
-| **Churn Rate** card/values | Format as percentage with 1–2 decimal places (Format pane → Display units: Auto, Value decimal places: 1) |
-| **Line chart month axis** | If month names sort alphabetically rather than by calendar order, add a **Sort by column** on `dim_date[month_name]` → sort by `dim_date[month]` (the integer column) |
+| **Churn Rate** measure format | Format as percentage with 1 decimal place for a clean executive view, or 2 decimal places for more precision (Format pane → Display units: Auto, Value decimal places: 1) |
+| **Churn Rate** card title | Keep the title short — use "Churn Rate" |
+| **Line chart month axis** | Put `dim_date[month_name]` on the axis; apply **Sort by column** → `dim_date[month]` (integer) so Jan–Dec stays in calendar order. |
+| **Line chart — multi-year data** | If data spans multiple years, use a year-month calculated column (e.g. `FORMAT(dim_date[full_date], "YYYY-MM")`) instead of `month_name` alone. |
+| **Bar chart bars** | Use a simple, consistent color palette so bars are easy to read at a glance |
 | **Bar chart data labels** | Format pane → Data labels → On; set font size to 10–11 pt |
-| **Cards** | Keep font size large (24–32 pt for the value) and remove borders for a clean executive look |
+| **Cards** | Value font size: 24–32 pt; remove card borders for a clean executive look; align all four cards in a single row with consistent spacing |
+
+> **Tip:** If your month field is text (`month_name`), always confirm that the sort column is numeric (`month`). Without this, the line chart will display months alphabetically (Apr, Aug, Dec …) instead of chronologically.
 
 ---
 
