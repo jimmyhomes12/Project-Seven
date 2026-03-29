@@ -56,18 +56,26 @@ This guide connects Power BI Desktop to the `ecommerce_warehouse` PostgreSQL dat
 #### DAX measures
 
 ```dax
--- Churn Rate
-Churn Rate =
-DIVIDE(
-    CALCULATE(COUNTROWS(fact_churn), fact_churn[churn_flag] = TRUE()),
-    DISTINCTCOUNT(fact_churn[customer_id])
+-- Total distinct customers in the churn fact
+Total Customers = DISTINCTCOUNT(fact_churn[customer_id])
+
+-- Customers who churned
+Churned Customers =
+CALCULATE(
+    DISTINCTCOUNT(fact_churn[customer_id]),
+    fact_churn[churn_flag] = TRUE()
 )
 
--- Active Customers (customers with at least one sale)
-Active Customers = DISTINCTCOUNT(fact_sales[customer_id])
+-- Churn Rate
+Churn Rate =
+DIVIDE([Churned Customers], [Total Customers])
 
--- Total Customers
-Total Customers = DISTINCTCOUNT(fact_churn[customer_id])
+-- Active Customers (customers with at least one sale)
+Active Customers =
+CALCULATE(
+    DISTINCTCOUNT(fact_churn[customer_id]),
+    fact_churn[churn_flag] = FALSE()
+)
 
 -- Revenue at Risk from churned customers
 Churn Revenue Impact =
@@ -77,7 +85,7 @@ CALCULATE(
 )
 ```
 
-> **Tip:** `churn_flag` is a PostgreSQL `BOOLEAN` column. In DAX use `= TRUE()` (or `= 1`—both work because DAX treats TRUE as 1).
+> **Tip:** `churn_flag` is a PostgreSQL `BOOLEAN` column. In DAX use `= TRUE()` / `= FALSE()` (or `= 1` / `= 0`—both work because DAX treats TRUE as 1).
 
 #### Visuals
 
@@ -93,6 +101,30 @@ CALCULATE(
 - `dim_customer[region]`
 - `dim_customer[membership_status]`
 - `dim_date[full_date]` (range slicer)
+
+---
+
+### Customer Segment Measures
+
+Use these on Page 2 (Churn Drivers) or wherever segment breakdowns are needed.
+
+```dax
+-- Average number of orders per customer
+Avg Orders = AVERAGE(fact_churn[num_orders])
+
+-- Average total spend per customer
+Avg Spend = AVERAGE(fact_churn[total_spend])
+
+-- Average satisfaction score per customer
+Avg Satisfaction = AVERAGE(fact_churn[satisfaction_score])
+
+-- Average engagement score per customer
+Avg Engagement = AVERAGE(fact_churn[engagement_score])
+```
+
+> **Note:** `fact_churn` does not contain a `tenure_months` column. If you need tenure, derive it in the ETL or add a computed column: `DATEDIFF('month', dim_customer[first_seen_date], TODAY())`.
+>
+> Drop any of these onto an axis of `dim_customer[membership_status]`, `dim_customer[region]`, or `dim_customer[income_band]` to get a **Churn Rate by Segment** breakdown.
 
 ---
 
@@ -117,14 +149,35 @@ CALCULATE(
 ### DAX measures
 
 ```dax
--- Conversion rate per group
-Conversion Rate =
-DIVIDE(
-    CALCULATE(COUNTROWS(fact_ab_test), fact_ab_test[converted] = TRUE()),
-    DISTINCTCOUNT(fact_ab_test[ab_test_id])
+-- Total unique users enrolled in tests
+Test Users = DISTINCTCOUNT(fact_ab_test[user_id])
+
+-- Total conversions
+Conversions =
+CALCULATE(
+    COUNTROWS(fact_ab_test),
+    fact_ab_test[converted] = TRUE()
 )
 
--- Lift: treatment conversion minus control conversion
+-- Overall conversion rate (conversions ÷ unique users)
+Conversion Rate =
+DIVIDE([Conversions], [Test Users])
+
+-- Conversion rate for the control group only
+Control Conversion Rate =
+CALCULATE(
+    [Conversion Rate],
+    fact_ab_test[group_name] = "control"
+)
+
+-- Conversion rate for the treatment group only
+Treatment Conversion Rate =
+CALCULATE(
+    [Conversion Rate],
+    fact_ab_test[group_name] = "treatment"
+)
+
+-- Absolute lift: treatment minus control
 Lift =
 VAR control_conv =
     CALCULATE([Conversion Rate], fact_ab_test[group_name] = "control")
@@ -132,6 +185,10 @@ VAR treat_conv =
     CALCULATE([Conversion Rate], fact_ab_test[group_name] = "treatment")
 RETURN
     treat_conv - control_conv
+
+-- Relative lift as a percentage
+Lift % =
+DIVIDE([Lift], [Control Conversion Rate])
 ```
 
 ### Recommended visuals
@@ -223,15 +280,32 @@ Expected output: eight tables — `dim_channel`, `dim_customer`, `dim_date`, `di
 
 ---
 
+## 6. Build Order
+
+Follow this sequence to avoid broken measure references and missing relationships.
+
+1. **Confirm relationships** in Model view (verify the relationship mappings in Section 1).
+2. **Create churn measures first:** `Total Customers`, `Churned Customers`, `Churn Rate`, `Active Customers`, `Churn Revenue Impact`.
+3. **Create customer segment measures:** `Avg Orders`, `Avg Spend`, `Avg Satisfaction`, `Avg Engagement`.
+4. **Create A/B test measures:** `Test Users`, `Conversions`, `Conversion Rate`, `Control Conversion Rate`, `Treatment Conversion Rate`, `Lift`, `Lift %`.
+5. **Build Page 1 (Churn Overview):** KPI cards, line chart for churn over time, bar/treemap by region or membership status, slicers.
+6. **Build Page 2 (Churn Drivers):** scatter plot, decomposition tree, key influencers visual.
+7. **Build Page 3 (A/B Test Results):** experiment matrix, clustered bar (control vs. treatment), lift card, optional CI line chart.
+8. **Publish** to Power BI Service (optional, see Section 4).
+
+---
+
 ## Quick-start checklist (≈30 minutes)
 
 - [ ] PostgreSQL is running and `ecommerce_warehouse` is populated (see [README.md](README.md)).
 - [ ] Open Power BI Desktop → **Get Data → PostgreSQL database** → `localhost`, `ecommerce_warehouse`.
 - [ ] Select the eight `dw.*` tables and click **Load**.
 - [ ] In Model view, verify all relationships (add the `churn_date → full_date` relationship manually).
-- [ ] Create the four KPI DAX measures (Churn Rate, Active Customers, Total Customers, Churn Revenue Impact).
+- [ ] Create the five core churn DAX measures (`Total Customers`, `Churned Customers`, `Churn Rate`, `Active Customers`, `Churn Revenue Impact`).
+- [ ] Create the four customer segment measures (`Avg Orders`, `Avg Spend`, `Avg Satisfaction`, `Avg Engagement`).
+- [ ] Create the seven A/B test measures (`Test Users`, `Conversions`, `Conversion Rate`, `Control Conversion Rate`, `Treatment Conversion Rate`, `Lift`, `Lift %`).
 - [ ] Build the **Churn Rate by Membership Status** bar chart as a smoke test.
 - [ ] Add remaining Page 1 visuals and slicers.
 - [ ] Add Page 2 churn-driver visuals.
-- [ ] Add the A/B Test Results page with the matrix and lift bar chart.
+- [ ] Add the A/B Test Results page with the matrix, lift bar chart, and optional CI line chart.
 - [ ] Publish to Power BI Service (optional).
