@@ -40,7 +40,8 @@ This guide connects Power BI Desktop to the `ecommerce_warehouse` PostgreSQL dat
    | `fact_sales.channel_id`     | `dim_channel.channel_id`      | channel_id     |
    | `fact_sales.date_key`       | `dim_date.date_key`           | date_key       |
    | `fact_churn.customer_id`    | `dim_customer.customer_id`    | customer_id    |
-   | `fact_churn.churn_date`     | `dim_date.full_date`          | churn_date     |
+   | `fact_churn.date_key`       | `dim_date.date_key`           | date_key       |
+   | `fact_churn.churn_date`     | `dim_date.full_date`          | churn_date (inactive — use date_key relationship for filters) |
    | `fact_ab_test.user_id`      | `dim_customer.customer_id`    | user_id        |
    | `fact_ab_test.experiment_id`| `dim_experiment.experiment_id`| experiment_id  |
    | `fact_ab_test.date_key`     | `dim_date.date_key`           | date_key       |
@@ -78,7 +79,8 @@ CALCULATE(
 )
 
 -- Revenue at Risk from churned customers
-Churn Revenue Impact =
+-- Also referred to as "Churned Revenue" in the dashboard cards
+Churned Revenue =
 CALCULATE(
     SUM(fact_sales[revenue]),
     FILTER(fact_churn, fact_churn[churn_flag] = TRUE())
@@ -91,9 +93,9 @@ CALCULATE(
 
 | Visual | X / Rows | Y / Values | Notes |
 |--------|----------|------------|-------|
-| Card ×4 | — | Churn Rate, Active Customers, Total Customers, Churn Revenue Impact | Pin to top of page |
-| Bar chart | `dim_customer[membership_status]` | `[Churn Rate]` | Sorted descending |
-| Line chart | `dim_date[month]` | `[Churn Rate]` | Shows monthly trend |
+| Card ×4 | — | Churn Rate, Total Customers, Churned Customers, Churned Revenue | Pin to top of page; keep cards large and simple |
+| Bar chart | `dim_customer[membership_status]` | `[Churn Rate]` | Sorted descending; turn on data labels |
+| Line chart | `dim_date[month]` | `[Churn Rate]` | Shows monthly trend; sort by numeric month key if needed |
 | Treemap | `dim_customer[region]` | `[Churn Rate]` | Colour saturation = churn rate |
 
 #### Slicers
@@ -101,6 +103,17 @@ CALCULATE(
 - `dim_customer[region]`
 - `dim_customer[membership_status]`
 - `dim_date[full_date]` (range slicer)
+
+#### Page 1 formatting
+
+Apply these settings before adding more pages so the dashboard looks polished and is easier to present:
+
+| Element | Setting |
+|---------|---------|
+| **Churn Rate** card/values | Format as percentage with 1–2 decimal places (Format pane → Display units: Auto, Value decimal places: 1) |
+| **Line chart month axis** | If month names sort alphabetically rather than by calendar order, add a **Sort by column** on `dim_date[month_name]` → sort by `dim_date[month]` (the integer column) |
+| **Bar chart data labels** | Format pane → Data labels → On; set font size to 10–11 pt |
+| **Cards** | Keep font size large (24–32 pt for the value) and remove borders for a clean executive look |
 
 ---
 
@@ -284,11 +297,11 @@ Expected output: eight tables — `dim_channel`, `dim_customer`, `dim_date`, `di
 
 Follow this sequence to avoid broken measure references and missing relationships.
 
-1. **Confirm relationships** in Model view (verify the relationship mappings in Section 1).
-2. **Create churn measures first:** `Total Customers`, `Churned Customers`, `Churn Rate`, `Active Customers`, `Churn Revenue Impact`.
+1. **Confirm relationships** in Model view (verify the relationship mappings in Section 1). The active date filter path for `fact_churn` uses `fact_churn[date_key] → dim_date[date_key]`.
+2. **Create churn measures first:** `Total Customers`, `Churned Customers`, `Churn Rate`, `Active Customers`, `Churned Revenue`.
 3. **Create customer segment measures:** `Avg Orders`, `Avg Spend`, `Avg Satisfaction`, `Avg Engagement`.
 4. **Create A/B test measures:** `Test Users`, `Conversions`, `Conversion Rate`, `Control Conversion Rate`, `Treatment Conversion Rate`, `Lift`, `Lift %`.
-5. **Build Page 1 (Churn Overview):** KPI cards, line chart for churn over time, bar/treemap by region or membership status, slicers.
+5. **Build Page 1 (Churn Overview):** KPI cards (Churn Rate, Total Customers, Churned Customers, Churned Revenue), line chart for churn over time, bar/treemap by region or membership status, slicers. Apply formatting (Churn Rate as %, data labels on bar chart, large card values).
 6. **Build Page 2 (Churn Drivers):** scatter plot, decomposition tree, key influencers visual.
 7. **Build Page 3 (A/B Test Results):** experiment matrix, clustered bar (control vs. treatment), lift card, optional CI line chart.
 8. **Publish** to Power BI Service (optional, see Section 4).
@@ -300,12 +313,13 @@ Follow this sequence to avoid broken measure references and missing relationship
 - [ ] PostgreSQL is running and `ecommerce_warehouse` is populated (see [README.md](README.md)).
 - [ ] Open Power BI Desktop → **Get Data → PostgreSQL database** → `localhost`, `ecommerce_warehouse`.
 - [ ] Select the eight `dw.*` tables and click **Load**.
-- [ ] In Model view, verify all relationships (add the `churn_date → full_date` relationship manually).
-- [ ] Create the five core churn DAX measures (`Total Customers`, `Churned Customers`, `Churn Rate`, `Active Customers`, `Churn Revenue Impact`).
+- [ ] In Model view, verify all relationships. Ensure the active date relationship for `fact_churn` uses `fact_churn[date_key] → dim_date[date_key]`; the `churn_date → full_date` relationship can be set to inactive.
+- [ ] Create the five core churn DAX measures (`Total Customers`, `Churned Customers`, `Churn Rate`, `Active Customers`, `Churned Revenue`).
 - [ ] Create the four customer segment measures (`Avg Orders`, `Avg Spend`, `Avg Satisfaction`, `Avg Engagement`).
 - [ ] Create the seven A/B test measures (`Test Users`, `Conversions`, `Conversion Rate`, `Control Conversion Rate`, `Treatment Conversion Rate`, `Lift`, `Lift %`).
-- [ ] Build the **Churn Rate by Membership Status** bar chart as a smoke test.
-- [ ] Add remaining Page 1 visuals and slicers.
+- [ ] Add the **Churn Rate** card as a smoke test and confirm it responds to the region/membership_status slicers.
+- [ ] Add remaining Page 1 visuals: Total Customers, Churned Customers, Churned Revenue cards; line chart (month vs Churn Rate); bar chart (membership_status or region vs Churn Rate).
+- [ ] Apply Page 1 formatting: Churn Rate as percentage (1–2 dp), data labels on bar chart, large card values, month axis sorted by numeric key.
 - [ ] Add Page 2 churn-driver visuals.
 - [ ] Add the A/B Test Results page with the matrix, lift bar chart, and optional CI line chart.
 - [ ] Publish to Power BI Service (optional).
