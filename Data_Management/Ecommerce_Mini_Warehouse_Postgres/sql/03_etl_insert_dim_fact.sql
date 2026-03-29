@@ -124,6 +124,7 @@ INSERT INTO dw.fact_churn (
     customer_id,
     churn_flag,
     churn_date,
+    date_key,
     total_spend,
     num_orders,
     engagement_score,
@@ -133,6 +134,11 @@ SELECT
     customer_id,
     (churn_flag = '1')                                      AS churn_flag,
     NULLIF(churn_date, '')::DATE                            AS churn_date,
+    CASE
+        WHEN NULLIF(churn_date, '') IS NOT NULL
+        THEN TO_CHAR(NULLIF(churn_date, '')::DATE, 'YYYYMMDD')::INT
+        ELSE NULL
+    END                                                     AS date_key,
     total_spend::NUMERIC,
     num_orders::INT,
     engagement_score::NUMERIC,
@@ -141,6 +147,7 @@ FROM staging.stg_churn
 ON CONFLICT (customer_id) DO UPDATE
     SET churn_flag       = EXCLUDED.churn_flag,
         churn_date       = EXCLUDED.churn_date,
+        date_key         = EXCLUDED.date_key,
         total_spend      = EXCLUDED.total_spend,
         num_orders       = EXCLUDED.num_orders,
         engagement_score = EXCLUDED.engagement_score,
