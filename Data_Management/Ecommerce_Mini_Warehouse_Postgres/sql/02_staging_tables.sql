@@ -67,10 +67,12 @@ CREATE TABLE staging.stg_ab_test (
 );
 
 -- =============================================================
--- Load CSV files into staging tables via COPY
--- Run these COPY commands from psql (adjust file paths as needed)
+-- Load CSV files into staging tables
+-- NOTE: \COPY is a psql client meta-command and cannot be run
+-- as plain SQL (e.g. in pgAdmin / DBeaver / server-side scripts).
+-- Use the companion shell script to load data:
+--
+--   bash sql/02b_load_staging_data.sh
+--
+-- or run the \COPY commands manually from a psql session.
 -- =============================================================
-
-\COPY staging.stg_sales   (order_id, customer_id, product_id, channel, order_date, category, product_name, region, quantity, unit_price, revenue, cost, gross_profit) FROM 'data/sales_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
-\COPY staging.stg_churn   (customer_id, region, income_band, membership_status, total_spend, num_orders, last_order_date, days_since_last_order, engagement_score, churn_flag, churn_date) FROM 'data/churn_raw.csv'   WITH (FORMAT CSV, HEADER TRUE);
-\COPY staging.stg_ab_test (user_id, experiment_name, ab_group, converted, conversion_date, revenue, page_views, time_on_site_secs) FROM 'data/ab_test_raw.csv' WITH (FORMAT CSV, HEADER TRUE);
