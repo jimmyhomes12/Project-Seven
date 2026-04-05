@@ -1,0 +1,61 @@
+table _Measures
+	lineageTag: 200eaece-f38d-4013-b170-26dd299c6c3c
+	isHidden
+
+	measure 'Total Customers' = DISTINCTCOUNT(fact_churn[customer_id])
+		formatString: #,0
+		lineageTag: f759eeb7-4468-4583-9f1b-720917c8f751
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Churned Customers'
+		expression
+			```
+			CALCULATE(
+			    DISTINCTCOUNT(fact_churn[customer_id]),
+			    fact_churn[churn_flag] = 1
+			)
+			```
+		formatString: #,0
+		lineageTag: ebc6d915-c019-46cc-a9ef-5d43515c29c8
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Churn Rate'
+		expression = DIVIDE([Churned Customers], [Total Customers])
+		formatString: 0.00%
+		lineageTag: 61757e32-a0ee-41ea-b52a-a56ad62d818a
+
+	measure 'Active Customers'
+		expression
+			```
+			CALCULATE(
+			    DISTINCTCOUNT(fact_churn[customer_id]),
+			    fact_churn[churn_flag] = 0
+			)
+			```
+		formatString: #,0
+		lineageTag: cdeb9f3a-2a20-4ec7-83d7-3b4ab510a66d
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure 'Churned Revenue'
+		expression
+			```
+			CALCULATE(
+			    SUM(fact_sales[revenue]),
+			    fact_churn[churn_flag] = 1
+			)
+			```
+		formatString: \$#,0.00
+		lineageTag: e06dad33-5da0-46a1-93de-5f3c2e7ed7da
+
+		annotation PBI_FormatHint = {"isCurrency":true}
+
+	partition '_Measures-Partition'
+		mode: import
+		source
+			type: calculated
+			expression = ROW("Placeholder", BLANK())
+
+	annotation PBI_HiddenUnusedColumns = 1

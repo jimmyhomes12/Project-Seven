@@ -1,0 +1,9 @@
+expression 'PostgreSQL Server'
+		kind: m
+		lineageTag: ae3072ec-255b-40b7-8357-556744a49d18
+		expression = "localhost" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+
+expression 'PostgreSQL Database'
+		kind: m
+		lineageTag: d314f1f2-fdae-472e-9763-8fe2d76a2f77
+		expression = "ecommerce_warehouse" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]

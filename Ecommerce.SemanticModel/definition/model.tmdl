@@ -1,0 +1,50 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+
+	ref table dim_customer
+	ref table dim_date
+	ref table dim_channel
+	ref table dim_product
+	ref table dim_experiment
+	ref table fact_churn
+	ref table fact_sales
+	ref table fact_ab_test
+	ref table _Measures
+
+	/// fact_churn.customer_id (FK) → dim_customer.customer_id (PK); filter flows dim→fact
+	relationship 'ca3f38a6-6505-49a2-bdb6-578e65fce885'
+		fromColumn: fact_churn.customer_id
+		toColumn: dim_customer.customer_id
+
+	/// fact_ab_test.user_id (FK) → dim_customer.customer_id (PK); filter flows dim→fact
+	relationship 'b014a6f2-4859-4e52-8963-8f5222282e1f'
+		fromColumn: fact_ab_test.user_id
+		toColumn: dim_customer.customer_id
+
+	/// fact_sales.date_key (FK) → dim_date.date_key (PK); filter flows dim→fact
+	relationship 'a94eb027-64dc-4e70-bfce-fb483ffa7689'
+		fromColumn: fact_sales.date_key
+		toColumn: dim_date.date_key
+
+	/// fact_churn.date_key (FK) → dim_date.date_key (PK); filter flows dim→fact
+	relationship 'dc0a8830-fad6-4178-9372-e886ecfcb982'
+		fromColumn: fact_churn.date_key
+		toColumn: dim_date.date_key
+
+	/// fact_sales.channel_id (FK) → dim_channel.channel_id (PK); filter flows dim→fact
+	relationship '1c841dcf-a3f8-43cf-8b69-57e7901033f9'
+		fromColumn: fact_sales.channel_id
+		toColumn: dim_channel.channel_id
+
+	/// fact_sales.product_id (FK) → dim_product.product_id (PK); filter flows dim→fact
+	relationship '4c36efb8-5646-4594-b25c-016dc081669b'
+		fromColumn: fact_sales.product_id
+		toColumn: dim_product.product_id
+
+	/// fact_ab_test.experiment_id (FK) → dim_experiment.experiment_id (PK); filter flows dim→fact
+	relationship 'c77d4a47-0260-490d-8ce8-4ea828135aa0'
+		fromColumn: fact_ab_test.experiment_id
+		toColumn: dim_experiment.experiment_id
+
+	annotation PBIDesktopVersion = 2.130.0

@@ -1,0 +1,67 @@
+table fact_ab_test
+	lineageTag: 2b348e67-7675-435b-a21b-01351d2b0810
+
+	column ab_test_id
+		dataType: int64
+		lineageTag: 4d3fda86-72f4-49c8-89de-6e8e41db1050
+		summarizeBy: none
+		sourceColumn: ab_test_id
+
+		annotation SummarizationSetBy = Automatic
+	column user_id
+		dataType: string
+		lineageTag: d80b8374-86fa-4af7-a320-487e8faf8c03
+		summarizeBy: none
+		sourceColumn: user_id
+
+		annotation SummarizationSetBy = Automatic
+	column experiment_id
+		dataType: int64
+		lineageTag: 9e7a6bee-ab49-4b87-b8a6-96a0f622af6e
+		summarizeBy: none
+		sourceColumn: experiment_id
+
+		annotation SummarizationSetBy = Automatic
+	column group_name
+		dataType: string
+		lineageTag: 0c668978-cb2f-4270-bbeb-f288156453eb
+		summarizeBy: none
+		sourceColumn: group_name
+
+		annotation SummarizationSetBy = Automatic
+	column converted
+		dataType: boolean
+		lineageTag: 9185efe0-a1bd-4184-842d-df88ab0b36dc
+		summarizeBy: none
+		sourceColumn: converted
+
+		annotation SummarizationSetBy = Automatic
+	column date_key
+		dataType: int64
+		lineageTag: a9b89544-7e67-42ac-84da-ce1460608939
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+	column revenue
+		dataType: decimal
+		lineageTag: 8c6db368-4419-4d37-a240-9da7c7ca6c73
+		summarizeBy: sum
+		sourceColumn: revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'fact_ab_test-Partition'
+		mode: import
+		source
+			type: m
+			expression
+				```
+				let
+				    Source = PostgreSQL.Database(#"PostgreSQL Server", #"PostgreSQL Database"),
+				    Data   = Source{[Schema = "dw", Item = "fact_ab_test"]}[Data]
+				in
+				    Data
+				```
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,81 @@
+table fact_sales
+	lineageTag: 335a2c1c-11c9-4500-b1a9-b948790308c1
+
+	column sale_id
+		dataType: int64
+		lineageTag: 32110ad8-2a72-4321-804b-87aa399ee82d
+		summarizeBy: none
+		sourceColumn: sale_id
+
+		annotation SummarizationSetBy = Automatic
+	column customer_id
+		dataType: string
+		lineageTag: 9c760ff2-f974-43d7-b5ee-52c897fd2b9c
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+	column product_id
+		dataType: string
+		lineageTag: ea20196c-4d63-4675-b2a5-7f3b2b150e1e
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+	column date_key
+		dataType: int64
+		lineageTag: 99f6a7d2-bd7c-4ec1-9cec-dbe39e88025e
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+	column channel_id
+		dataType: int64
+		lineageTag: 2eb5a377-f66d-40d8-962f-6afe592b5674
+		summarizeBy: none
+		sourceColumn: channel_id
+
+		annotation SummarizationSetBy = Automatic
+	column quantity
+		dataType: int64
+		lineageTag: 216a6cb6-8465-4fc4-82f3-c2dde3b77ce9
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		annotation SummarizationSetBy = Automatic
+	column revenue
+		dataType: decimal
+		lineageTag: c5a7e0ad-4f62-4e05-9be5-b545a1e0956f
+		summarizeBy: sum
+		sourceColumn: revenue
+
+		annotation SummarizationSetBy = Automatic
+	column cogs
+		dataType: decimal
+		lineageTag: 692d3e39-f942-448e-b88b-885526eaf57d
+		summarizeBy: sum
+		sourceColumn: cogs
+
+		annotation SummarizationSetBy = Automatic
+	column gross_profit
+		dataType: decimal
+		lineageTag: 0bfe7635-fcbf-4fae-8e60-30c0a29d6589
+		summarizeBy: sum
+		sourceColumn: gross_profit
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'fact_sales-Partition'
+		mode: import
+		source
+			type: m
+			expression
+				```
+				let
+				    Source = PostgreSQL.Database(#"PostgreSQL Server", #"PostgreSQL Database"),
+				    Data   = Source{[Schema = "dw", Item = "fact_sales"]}[Data]
+				in
+				    Data
+				```
+
+	annotation PBI_ResultType = Table
