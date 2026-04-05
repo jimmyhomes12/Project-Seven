@@ -6,11 +6,6 @@
       "report": {
         "path": "Ecommerce.Report"
       }
-    },
-    {
-      "semanticModel": {
-        "path": "Ecommerce.SemanticModel"
-      }
     }
   ],
   "settings": {
