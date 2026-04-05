@@ -5,6 +5,7 @@
     "displayName": "Ecommerce"
   },
   "config": {
+    "version": "2.0",
     "logicalId": "48de2ac0-3522-4088-baae-1214fbe51824"
   }
 }
