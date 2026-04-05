@@ -60,7 +60,7 @@ table fact_churn
 	column annual_income_usd
 		dataType: decimal
 		lineageTag: 2ddaab6e-ccce-4810-8c94-d12e51e647be
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: annual_income_usd
 
 		annotation SummarizationSetBy = Automatic
