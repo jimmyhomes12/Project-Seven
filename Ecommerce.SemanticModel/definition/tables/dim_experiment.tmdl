@@ -1,0 +1,39 @@
+table dim_experiment
+	lineageTag: efe346d8-72ed-4bfb-8f49-068fa6e4c80e
+
+	column experiment_id
+		dataType: int64
+		lineageTag: e83763bd-5bc9-4161-abfc-03485523e41f
+		summarizeBy: none
+		sourceColumn: experiment_id
+
+		annotation SummarizationSetBy = Automatic
+	column experiment_name
+		dataType: string
+		lineageTag: d0867cd0-f813-4daa-94dd-5335086e4c98
+		summarizeBy: none
+		sourceColumn: experiment_name
+
+		annotation SummarizationSetBy = Automatic
+	column description
+		dataType: string
+		lineageTag: bd0b86a2-c23a-47de-b91f-c20228d5a1b6
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dim_experiment-Partition'
+		mode: import
+		source
+			type: m
+			expression
+				```
+				let
+				    Source = PostgreSQL.Database(#"PostgreSQL Server", #"PostgreSQL Database"),
+				    Data   = Source{[Schema = "dw", Item = "dim_experiment"]}[Data]
+				in
+				    Data
+				```
+
+	annotation PBI_ResultType = Table

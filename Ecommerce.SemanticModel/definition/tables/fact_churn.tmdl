@@ -1,0 +1,88 @@
+table fact_churn
+	lineageTag: fcba3405-90c2-44e8-bc25-77830be065ff
+
+	column customer_id
+		dataType: string
+		lineageTag: 6c0deb54-998d-4f0a-b2e3-e328c1d6c703
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+	column churn_flag
+		dataType: boolean
+		lineageTag: 7986d56d-23a9-4dce-8bde-df2557e38df7
+		summarizeBy: none
+		sourceColumn: churn_flag
+
+		annotation SummarizationSetBy = Automatic
+	column churn_date
+		dataType: dateTime
+		lineageTag: 53856362-ca34-457e-8f30-8fce741374f5
+		summarizeBy: none
+		sourceColumn: churn_date
+
+		annotation SummarizationSetBy = Automatic
+	column date_key
+		dataType: int64
+		lineageTag: 79e80d0a-c3f1-4258-896d-ce63b5ff5302
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+	column total_spend
+		dataType: decimal
+		lineageTag: 375561f1-e790-4096-a684-b9189f49137f
+		summarizeBy: sum
+		sourceColumn: total_spend
+
+		annotation SummarizationSetBy = Automatic
+	column num_orders
+		dataType: int64
+		lineageTag: 12a4f344-fcb6-485c-9aa7-860747ca9754
+		summarizeBy: sum
+		sourceColumn: num_orders
+
+		annotation SummarizationSetBy = Automatic
+	column engagement_score
+		dataType: decimal
+		lineageTag: 16dd952c-bd66-49fe-bcbb-e7daf94cb847
+		summarizeBy: average
+		sourceColumn: engagement_score
+
+		annotation SummarizationSetBy = Automatic
+	column satisfaction_score
+		dataType: decimal
+		lineageTag: 01894e9e-48a1-4f3d-9ea3-07267263de34
+		summarizeBy: average
+		sourceColumn: satisfaction_score
+
+		annotation SummarizationSetBy = Automatic
+	column annual_income_usd
+		dataType: decimal
+		lineageTag: 2ddaab6e-ccce-4810-8c94-d12e51e647be
+		summarizeBy: sum
+		sourceColumn: annual_income_usd
+
+		annotation SummarizationSetBy = Automatic
+	column last_order_date
+		dataType: dateTime
+		lineageTag: cf8428ed-006a-43b0-8e1b-157d438adb83
+		summarizeBy: none
+		sourceColumn: last_order_date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'fact_churn-Partition'
+		mode: import
+		source
+			type: m
+			expression
+				```
+				let
+				    Source = PostgreSQL.Database(#"PostgreSQL Server", #"PostgreSQL Database"),
+				    Data   = Source{[Schema = "dw", Item = "fact_churn"]}[Data]
+				in
+				    Data
+				```
+
+	annotation PBI_ResultType = Table

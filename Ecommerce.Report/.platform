@@ -1,0 +1,10 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/platform/1.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Ecommerce"
+  },
+  "config": {
+    "logicalId": "48de2ac0-3522-4088-baae-1214fbe51824"
+  }
+}

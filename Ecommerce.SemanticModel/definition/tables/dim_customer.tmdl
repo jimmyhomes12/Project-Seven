@@ -1,0 +1,74 @@
+table dim_customer
+	lineageTag: 0fd85d44-64c7-454c-b5a3-e3da78e88ea6
+
+	column customer_id
+		dataType: string
+		lineageTag: db094588-f0ce-4144-9e8a-bc2c6d4d3876
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+	column customer_name
+		dataType: string
+		lineageTag: 7c41ab1c-ba8c-4da0-af92-786d37888a41
+		summarizeBy: none
+		sourceColumn: customer_name
+
+		annotation SummarizationSetBy = Automatic
+	column region
+		dataType: string
+		lineageTag: e58a13ec-708e-49f5-b78a-5742f42f171e
+		summarizeBy: none
+		sourceColumn: region
+
+		annotation SummarizationSetBy = Automatic
+	column income_band
+		dataType: string
+		lineageTag: e608144d-6658-4be7-aef7-241f7a60cdca
+		summarizeBy: none
+		sourceColumn: income_band
+
+		annotation SummarizationSetBy = Automatic
+	column membership_status
+		dataType: string
+		lineageTag: 14d69222-a210-4eda-aaca-6ab7cd3cb81f
+		summarizeBy: none
+		sourceColumn: membership_status
+
+		annotation SummarizationSetBy = Automatic
+	column first_seen_date
+		dataType: dateTime
+		lineageTag: ccd0b298-ed02-47d7-898a-298977f5a4f7
+		summarizeBy: none
+		sourceColumn: first_seen_date
+
+		annotation SummarizationSetBy = Automatic
+	column last_purchase_date
+		dataType: dateTime
+		lineageTag: d905948b-4ed2-40eb-bb3c-7ef1099737ac
+		summarizeBy: none
+		sourceColumn: last_purchase_date
+
+		annotation SummarizationSetBy = Automatic
+	column is_churned
+		dataType: boolean
+		lineageTag: 1b8dcf63-e2e9-4fdb-aabc-98fb6711367a
+		summarizeBy: none
+		sourceColumn: is_churned
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dim_customer-Partition'
+		mode: import
+		source
+			type: m
+			expression
+				```
+				let
+				    Source = PostgreSQL.Database(#"PostgreSQL Server", #"PostgreSQL Database"),
+				    Data   = Source{[Schema = "dw", Item = "dim_customer"]}[Data]
+				in
+				    Data
+				```
+
+	annotation PBI_ResultType = Table

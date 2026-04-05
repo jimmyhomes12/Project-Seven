@@ -1,0 +1,32 @@
+table dim_channel
+	lineageTag: 625072a4-1288-4ea5-abf0-66340b148671
+
+	column channel_id
+		dataType: int64
+		lineageTag: 8c287316-9aea-452d-a7c3-35fda03564da
+		summarizeBy: none
+		sourceColumn: channel_id
+
+		annotation SummarizationSetBy = Automatic
+	column channel_name
+		dataType: string
+		lineageTag: 921fca86-24fa-48a8-8819-604880357702
+		summarizeBy: none
+		sourceColumn: channel_name
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dim_channel-Partition'
+		mode: import
+		source
+			type: m
+			expression
+				```
+				let
+				    Source = PostgreSQL.Database(#"PostgreSQL Server", #"PostgreSQL Database"),
+				    Data   = Source{[Schema = "dw", Item = "dim_channel"]}[Data]
+				in
+				    Data
+				```
+
+	annotation PBI_ResultType = Table

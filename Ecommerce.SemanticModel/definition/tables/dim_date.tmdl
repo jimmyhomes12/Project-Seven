@@ -1,0 +1,89 @@
+table dim_date
+	lineageTag: dc517c5f-d90c-4849-83f5-0b247237d0e1
+
+	column date_key
+		dataType: int64
+		lineageTag: b60aae2a-dc49-4e40-840a-0bf838fbe3eb
+		summarizeBy: none
+		sourceColumn: date_key
+
+		annotation SummarizationSetBy = Automatic
+	column full_date
+		dataType: dateTime
+		lineageTag: 68fc9b4d-877b-42f3-af21-7d855468cceb
+		summarizeBy: none
+		sourceColumn: full_date
+
+		annotation SummarizationSetBy = Automatic
+	column year
+		dataType: int64
+		lineageTag: 935a82ca-9fbd-4106-bc5c-d2067aacf087
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+	column quarter
+		dataType: int64
+		lineageTag: 214e9d89-b578-4b9e-925e-9d1a6995653f
+		summarizeBy: none
+		sourceColumn: quarter
+
+		annotation SummarizationSetBy = Automatic
+	column month
+		dataType: int64
+		lineageTag: 8108f6ff-b4d9-4364-9989-9cd57efed85e
+		summarizeBy: none
+		sourceColumn: month
+
+		annotation SummarizationSetBy = Automatic
+	column month_name
+		dataType: string
+		lineageTag: 08b44ae2-11fd-4572-91b7-3bd7a78675bf
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month
+
+		annotation SummarizationSetBy = Automatic
+	column week
+		dataType: int64
+		lineageTag: 8ceb13cc-99e8-47ad-b149-19a966e07d9a
+		summarizeBy: none
+		sourceColumn: week
+
+		annotation SummarizationSetBy = Automatic
+	column day
+		dataType: int64
+		lineageTag: a9efb23b-a277-4e47-bf45-4a3dc5492cf7
+		summarizeBy: none
+		sourceColumn: day
+
+		annotation SummarizationSetBy = Automatic
+	column day_name
+		dataType: string
+		lineageTag: d16f5ce9-aa17-4ee9-8886-b4e6643603e5
+		summarizeBy: none
+		sourceColumn: day_name
+
+		annotation SummarizationSetBy = Automatic
+	column is_weekend
+		dataType: boolean
+		lineageTag: fa99a9cf-dfa1-4092-8b91-b2139442056e
+		summarizeBy: none
+		sourceColumn: is_weekend
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dim_date-Partition'
+		mode: import
+		source
+			type: m
+			expression
+				```
+				let
+				    Source = PostgreSQL.Database(#"PostgreSQL Server", #"PostgreSQL Database"),
+				    Data   = Source{[Schema = "dw", Item = "dim_date"]}[Data]
+				in
+				    Data
+				```
+
+	annotation PBI_ResultType = Table

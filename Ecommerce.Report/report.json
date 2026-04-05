@@ -1,0 +1,120 @@
+{
+  "id": "2e676d9e-e6c9-4050-a1c0-59cdd429ee8d",
+  "resourcePackages": [],
+  "sections": [
+    {
+      "id": "ChurnOverview",
+      "name": "Churn Overview",
+      "ordinal": 0,
+      "height": 540,
+      "width": 1280,
+      "visualContainers": [
+        {
+          "x": 20,
+          "y": 20,
+          "z": 1000,
+          "width": 270,
+          "height": 100,
+          "config": "{\"name\": \"12a5a62e3f854933a78edf61\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 20, \"z\": 1000, \"height\": 100, \"width\": 270, \"tabOrder\": 0}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Churn Rate\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Churn Rate\"}, \"Name\": \"_Measures.Churn Rate\"}]}, \"objects\": {}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Churn Rate'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 310,
+          "y": 20,
+          "z": 1000,
+          "width": 270,
+          "height": 100,
+          "config": "{\"name\": \"5158e2c8daa74b4097de2701\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 310, \"y\": 20, \"z\": 1000, \"height\": 100, \"width\": 270, \"tabOrder\": 10}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Total Customers\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Total Customers\"}, \"Name\": \"_Measures.Total Customers\"}]}, \"objects\": {}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Total Customers'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 600,
+          "y": 20,
+          "z": 1000,
+          "width": 270,
+          "height": 100,
+          "config": "{\"name\": \"7372103251204b61b361785f\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 600, \"y\": 20, \"z\": 1000, \"height\": 100, \"width\": 270, \"tabOrder\": 20}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Churned Customers\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Churned Customers\"}, \"Name\": \"_Measures.Churned Customers\"}]}, \"objects\": {}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Churned Customers'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 890,
+          "y": 20,
+          "z": 1000,
+          "width": 270,
+          "height": 100,
+          "config": "{\"name\": \"936a00143b944af38faf679c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 890, \"y\": 20, \"z\": 1000, \"height\": 100, \"width\": 270, \"tabOrder\": 30}}], \"singleVisual\": {\"visualType\": \"card\", \"projections\": {\"Values\": [{\"queryRef\": \"_Measures.Churned Revenue\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Churned Revenue\"}, \"Name\": \"_Measures.Churned Revenue\"}]}, \"objects\": {}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Churned Revenue'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 130,
+          "z": 2000,
+          "width": 590,
+          "height": 250,
+          "config": "{\"name\": \"49d06423fe874e47be1d1b9b\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 130, \"z\": 2000, \"height\": 250, \"width\": 590, \"tabOrder\": 50}}], \"singleVisual\": {\"visualType\": \"lineChart\", \"projections\": {\"Category\": [{\"queryRef\": \"dim_date.month_name\", \"active\": true}], \"Y\": [{\"queryRef\": \"_Measures.Churn Rate\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_date\", \"Type\": 0}, {\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"month_name\"}, \"Name\": \"dim_date.month_name\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Churn Rate\"}, \"Name\": \"_Measures.Churn Rate\"}], \"OrderBy\": [{\"Direction\": 1, \"Expression\": {\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"month\"}}}]}, \"objects\": {\"dataPoint\": [{\"properties\": {\"showDataLabels\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Churn Rate Over Time'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 640,
+          "y": 130,
+          "z": 2000,
+          "width": 590,
+          "height": 250,
+          "config": "{\"name\": \"ddd32aa3f17e45e89078e7b5\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 640, \"y\": 130, \"z\": 2000, \"height\": 250, \"width\": 590, \"tabOrder\": 60}}], \"singleVisual\": {\"visualType\": \"clusteredBarChart\", \"projections\": {\"Category\": [{\"queryRef\": \"dim_customer.membership_status\", \"active\": true}], \"Y\": [{\"queryRef\": \"_Measures.Churn Rate\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"d\", \"Entity\": \"dim_customer\", \"Type\": 0}, {\"Name\": \"m\", \"Entity\": \"_Measures\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"d\"}}, \"Property\": \"membership_status\"}, \"Name\": \"dim_customer.membership_status\"}, {\"Measure\": {\"Expression\": {\"SourceRef\": {\"Source\": \"m\"}}, \"Property\": \"Churn Rate\"}, \"Name\": \"_Measures.Churn Rate\"}]}, \"objects\": {\"dataLabels\": [{\"properties\": {\"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Churn Rate by Segment'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 20,
+          "y": 420,
+          "z": 3000,
+          "width": 360,
+          "height": 85,
+          "config": "{\"name\": \"23c938865d4547dcbc4e95bd\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 20, \"y\": 420, \"z\": 3000, \"height\": 85, \"width\": 360, \"tabOrder\": 100}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_customer.region\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"dim_customer\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"region\"}, \"Name\": \"dim_customer.region\"}]}, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Region'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 400,
+          "y": 420,
+          "z": 3000,
+          "width": 360,
+          "height": 85,
+          "config": "{\"name\": \"66c01c668dad4af0b3943fe2\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 400, \"y\": 420, \"z\": 3000, \"height\": 85, \"width\": 360, \"tabOrder\": 110}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_customer.membership_status\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"dim_customer\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"membership_status\"}, \"Name\": \"dim_customer.membership_status\"}]}, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Membership Status'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        },
+        {
+          "x": 780,
+          "y": 420,
+          "z": 3000,
+          "width": 360,
+          "height": 85,
+          "config": "{\"name\": \"9707d68003da4712b1ce788c\", \"layouts\": [{\"id\": 0, \"position\": {\"x\": 780, \"y\": 420, \"z\": 3000, \"height\": 85, \"width\": 360, \"tabOrder\": 120}}], \"singleVisual\": {\"visualType\": \"slicer\", \"projections\": {\"Values\": [{\"queryRef\": \"dim_date.full_date\", \"active\": true}]}, \"prototypeQuery\": {\"Version\": 2, \"From\": [{\"Name\": \"t\", \"Entity\": \"dim_date\", \"Type\": 0}], \"Select\": [{\"Column\": {\"Expression\": {\"SourceRef\": {\"Source\": \"t\"}}, \"Property\": \"full_date\"}, \"Name\": \"dim_date.full_date\"}]}, \"objects\": {\"data\": [{\"properties\": {\"mode\": {\"expr\": {\"Literal\": {\"Value\": \"'Dropdown'\"}}}}}]}, \"vcObjects\": {\"title\": [{\"properties\": {\"text\": {\"expr\": {\"Literal\": {\"Value\": \"'Date'\"}}}, \"show\": {\"expr\": {\"Literal\": {\"Value\": \"true\"}}}}}]}}}",
+          "filters": "[]"
+        }
+      ],
+      "filters": "[]",
+      "config": "{\"defaultVisual\": {\"visualType\": \"tableEx\"}, \"themeCollection\": {\"baseTheme\": {\"name\": \"CY23SU08\", \"version\": \"5.52\", \"type\": 2}}}"
+    }
+  ],
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY23SU08",
+      "version": "5.52",
+      "type": 2
+    }
+  },
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": 1
+  },
+  "layoutOptimization": 0,
+  "slowDataSourceSettings": {
+    "isCrossHighlightingDisabled": false,
+    "isSlicerSelectionsButtonEnabled": false,
+    "isFilterPaneToggleButtonEnabled": false,
+    "isFieldWellFlyoutDisabled": false,
+    "isDefaultSummarizationDisabled": false,
+    "isOuterGroupingDisabled": false
+  },
+  "linguisticSchemaSyncVersion": 0,
+  "filters": "[]"
+}
